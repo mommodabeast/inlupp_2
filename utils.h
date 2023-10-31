@@ -18,8 +18,7 @@ int read_string(char *buf, int buf_siz);
 bool not_empty(char *str);
 bool is_number(char *str);
 int ask_question_int(char *question);
-//int ask_question_int(char *question);
-//char *ask_question_string(char *question, char *buf, int buf_siz);
+
 void clear_input_buffer();
 char print(char *string);
 char printin(char *string);

@@ -62,21 +62,6 @@ do
 while (c != '\n' && c != EOF);
 }
 
-/*int ask_question_int(char *question)
-{ 
-  int result = 0;
-  int conversions = 0;
-  do
-    {
-      printf("%s\n", question);
-      conversions = scanf("%d", &result);
-      clear_input_buffer();
-      putchar('\n');
-    }
-  while (conversions < 1);
-  return result;
-}*/
-
 int ask_question_int(char *question)
 {
   answer_t answer = ask_question(question, is_number, (convert_function) atoi);
@@ -108,22 +93,6 @@ int read_string(char *buf, int bufsize) {
   return counter;
 }
 
-/*char *ask_question_string(char *question, char *buf, int buf_siz)
-
-{
-
-char name[buf_siz];
-
-  do
-    {
-      printf("%s\n", question);
-      scanf("%s", name);
-      
-    }
-  while (read_string(buf, buf_siz) != 0);
-
-  return strdup(name);
-}*/
 
 char *ask_question_string(char *question)
 {
@@ -154,8 +123,6 @@ while (1) {
 
 
 }
-
-
 
 bool is_shelf(char *str) {
     int len = strlen(str);
