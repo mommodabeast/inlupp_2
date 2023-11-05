@@ -28,5 +28,7 @@ char *ask_question_string(char *question);
 
 bool is_shelf(char *string);
 char *ask_question_shelf(char *question);
+bool empty_or_more(char *str);
+char *ask_question_any_input_string(char *question);
 
 #endif 

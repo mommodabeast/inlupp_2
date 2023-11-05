@@ -83,29 +83,41 @@ int ask_question_int(char *question)
   return answer.int_value; // svaret som ett heltal
 }
 
-int read_string(char *buf, int bufsize) {
+// int read_string(char *buf, int bufsize) {
     
-  scanf("%[^\n]", buf);
-  
-  int counter = 0;
-  int length = strlen(buf);
+//   scanf("%[^\n]", buf);
 
-  if (length < bufsize - 1)
-  {
-    for(int i = 0; i < length; i++)
-      {
-        counter = counter + 1;
-      }
-  } else {
-    for (int j = 0; j < bufsize; j++)
-    {
-      counter = counter + 1;
+//   int counter = 0;
+//   int length = strlen(buf);
+
+//   if (length < bufsize - 1)
+//   {
+//     for(int i = 0; i < length; i++)
+//       {
+//         counter = counter + 1;
+//       }
+//   } else {
+//     for (int j = 0; j < bufsize; j++)
+//     {
+//       counter = counter + 1;
+//     }
+//   }
+
+//   clear_input_buffer();
+//   buf[counter] = '\0';
+//   return counter;
+// }
+
+int read_string(char *buf, int buf_siz) {
+    char character = getchar();
+    int counter = 0;
+    while (character != '\n' && counter <= buf_siz-1) {
+        buf[counter] = character;
+        counter++;
+        character = getchar();
     }
-  }
-
-  clear_input_buffer();
-  buf[counter] = '\0';
-  return counter;
+    buf[counter] = '\0';
+    return counter;
 }
 
 /*char *ask_question_string(char *question, char *buf, int buf_siz)
@@ -184,4 +196,14 @@ char *ask_question_shelf(char *question)
 {
   answer_t answer = ask_question(question, is_shelf, (convert_function) strdup);
   return answer.string_value; // svaret som ett heltal
+}
+
+bool empty_or_more(char *str)
+{
+  return true;
+}
+
+char *ask_question_any_input_string(char *question)
+{
+  return ask_question(question, empty_or_more, (convert_function) strdup).string_value;
 }

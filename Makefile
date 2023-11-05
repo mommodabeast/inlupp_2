@@ -6,4 +6,8 @@ memtest_logic:
 
 logic_run:
 	gcc -Wall logic.c linked_list.c hash_table.c common.c utils.c -g -lcunit -o run
-	./run < test.txt
+	./run
+
+logic_run_valgrind:
+	gcc -Wall logic.c linked_list.c hash_table.c common.c utils.c -g -lcunit -o run
+	valgrind --leak-check=full ./run
