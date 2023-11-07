@@ -22,16 +22,32 @@ struct merch {
 
 merch_t *ioopm_merch_create();
 
+shelf_t *ioopm_shelf_create();
+
+void free_shelf(elem_t key_ignored, elem_t *value, void *extra);
+
+void free_void_ptr_value(elem_t key_ignored, elem_t *value, void *ignored);
+
+void free_void_ptr_value_locations(elem_t key_ignored, elem_t *value, void *ignored);
+
+void free_void_ptr_key(elem_t key, elem_t *value_ignored, void *ignored);
+
+void ioopm_make_merch(merch_t *merch, char *name, char *desc, int price);
+
+void ioopm_shelf_destroy(shelf_t *shelf);
+
 void ioopm_merch_destroy(merch_t *merch);
 
 void ioopm_make_merch(merch_t *merch, char *name, char *desc, int price);
 
-void ioopm_add_merchandise(ioopm_hash_table_t *wh);
+void free_and_destroy_hts(ioopm_hash_table_t *wh, ioopm_hash_table_t *locations);
 
-void list_merchandise(ioopm_hash_table_t *wh);
+// void ioopm_add_merchandise(ioopm_hash_table_t *wh);
 
-void ioopm_replenish(ioopm_hash_table_t *wh, ioopm_hash_table_t *locations);
+// void list_merchandise(ioopm_hash_table_t *wh);
 
-void free_void_ptr_value(elem_t key_ignored, elem_t *value, void *ignored);
+// void ioopm_replenish(ioopm_hash_table_t *wh, ioopm_hash_table_t *locations);
 
-void free_void_ptr_key(elem_t key, elem_t *value_ignored, void *ignored);
+// void free_void_ptr_value(elem_t key_ignored, elem_t *value, void *ignored);
+
+// void free_void_ptr_key(elem_t key, elem_t *value_ignored, void *ignored);

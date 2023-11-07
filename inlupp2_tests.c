@@ -6,6 +6,7 @@
 #include "linked_list.h"
 #include "common.h"
 #include "logic.h"
+#include "ui.h"
 
 int init_suite(void) {
   // Change this function if you want to do something *before* you
