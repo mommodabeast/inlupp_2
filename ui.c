@@ -11,42 +11,15 @@
 #include "logic.h"
 
 
-char *merch_name_helper(ioopm_hash_table_t *wh) {
-    elem_t *result = calloc(1, sizeof(elem_t));
-    puts("Merchandise is already in warehouse! ");
-    char *name = ask_question_string("What is the name of the item? ");
-    elem_t name_elem_t = {.string = name};
 
-    if (ioopm_hash_table_lookup(wh, name_elem_t, result)) {
-        free(result);
-        free(name);
-        return merch_name_helper(wh);
-    } else {
-        free(result);
-        char *merch_name = strdup(name);
-        free(name);
-        return merch_name;
-    }
-}
 
 void ioopm_add_merchandise(ioopm_hash_table_t *wh) {
     elem_t *result = calloc(1, sizeof(elem_t));
     char *name = ask_question_string("What is the name of the item? ");
     char *desc = ask_question_string("What is the description of the item? ");
     int price = ask_question_int("What is the price of the item? ");
-    elem_t name_elem_t = {.string = name};
 
-    if (ioopm_hash_table_lookup(wh, name_elem_t, result)) {
-        printf("%s is already in the warehouse! Going back to main menu \n", name);
-        free(name);
-        free(desc);
-
-    } else {
-        merch_t *merchandise = ioopm_merch_create();
-        ioopm_make_merch(merchandise, name, desc, price);
-        ioopm_hash_table_insert(wh, (elem_t) {.string = name}, (elem_t) {.void_pointer = merchandise}); //inserta merch i warehouse (wh) hashtable
-        
-    }
+    wh_insert(wh, name, desc, price, result);
     free(result);
 }
 
@@ -83,35 +56,7 @@ void list_merchandise(ioopm_hash_table_t *wh) {
     ioopm_linked_list_destroy(keys);
 }
 
-void free_and_remove(char *name, elem_t *result, ioopm_hash_table_t *wh, ioopm_hash_table_t *locations) {
-    elem_t name_elem_t = {.string = name};
 
-    merch_t *merch = result->void_pointer;
-    char *name_to_remove = merch->name;
-
-    if (merch->locations == NULL) {  //om locations lista är 0 behöver vi bara freea och remova wh ht
-        free(merch->information);
-        ioopm_hash_table_remove(wh, name_elem_t);
-    } else {
-        free(merch->information);
-        ioopm_hash_table_remove(wh, name_elem_t);
-        ioopm_list_t *keys = ioopm_hash_table_keys(locations);
-        int size = ioopm_linked_list_size(keys);
-        for (int i = 0; i < size; i++) {
-            elem_t key = ioopm_linked_list_get(keys, i);
-            if (strcmp(name, key.string) == 0) {
-                char *key_string = key.string;
-                elem_t key_elem_t = {.string = key_string};
-                ioopm_hash_table_remove(locations, key_elem_t);
-                free(key_string);
-            }
-        }
-        ioopm_linked_list_destroy(keys);
-    }
-    free(name_to_remove);
-    free(merch);
-  
-}
 
 void remove_merchandise(ioopm_hash_table_t *wh, ioopm_hash_table_t *locations) {
     char *name = ask_question_string("Which item would you like to remove? ");
@@ -146,13 +91,13 @@ void remove_merchandise(ioopm_hash_table_t *wh, ioopm_hash_table_t *locations) {
 
 void edit_merchandise(ioopm_hash_table_t *wh, ioopm_hash_table_t *locations) {
     char *name = ask_question_string("What item would you like to edit? ");
+    char *new_name = ask_question_string("Insert new name: ");
+    char *new_desc = ask_question_string("Insert new description: ");
+    int new_price = ask_question_int("Insert new price: ");
     elem_t name_elem_t = {.string = name};
     elem_t *result = calloc(1, sizeof(elem_t));
 
-    if (ioopm_hash_table_lookup(wh, name_elem_t, result)) {     //kolla om name av en merch finns, annars rekursivt kall
-        char *new_name = ask_question_string("Insert new name: ");
-        char *new_desc = ask_question_string("Insert new description: ");
-        int new_price = ask_question_int("Insert new price: ");
+    if (ioopm_hash_table_lookup(wh, name_elem_t, result)) {     //kolla om name av en merch finns, annars gå till main menu
         elem_t new_name_elem_t = {.string = new_name};
         elem_t *new_result = calloc(1, sizeof(elem_t));
 
@@ -205,9 +150,11 @@ void edit_merchandise(ioopm_hash_table_t *wh, ioopm_hash_table_t *locations) {
         free(new_result);
         free(result);
     } else {
-        printf("%s does not exist in the warehouse!\n", name);
+        printf("%s does not exist in the warehouse! Going back to main menu\n", name);
         free(name);
         free(result);
+        free(new_name);
+        free(new_desc);
 
     }
     
@@ -221,6 +168,12 @@ void show_stock(ioopm_hash_table_t *wh, ioopm_hash_table_t *locations) {
     if (ioopm_hash_table_lookup(wh, name_elem_t, result)) {
         merch_t *merch = result->void_pointer;
         ioopm_list_t *shelf_list = merch->locations;
+
+        if (shelf_list == NULL) {
+            printf("%s is not in stock! \n", name);
+
+        } else {
+
         int size = ioopm_linked_list_size(shelf_list);
 
         for (int i = 0; i < size; i++) {
@@ -230,6 +183,8 @@ void show_stock(ioopm_hash_table_t *wh, ioopm_hash_table_t *locations) {
             printf("quantity: %d\n", location->quantity);
         }
         printf("Total stock: %d\n", merch->stock);
+        }
+
     } else {
         printf("%s does not exist in the warehouse!\n", name);
     

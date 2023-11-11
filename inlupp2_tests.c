@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "hash_table.h"
 #include "linked_list.h"
 #include "common.h"
@@ -44,13 +45,18 @@ void test_basic_functions() {
   ioopm_hash_table_destroy(locations);
 }
 
-void test_add_merchandise() {
+void test_add_merchandise() {   //tests the add_merch helper function instead, to avoid having inputs
+  puts("test add_merchandise\n");
   ioopm_hash_table_t *wh = ioopm_hash_table_create(ioopm_str_eq);
   ioopm_hash_table_t *locations = ioopm_hash_table_create(ioopm_str_eq);
   wh->hash_func = string_sum_hash;
   locations->hash_func = string_sum_hash;
   elem_t *result = calloc(1, sizeof(elem_t));
   elem_t milk = {.string = "milk"};
+  // elem_t *result = calloc(1, sizeof(elem_t));
+  //   char *name = "milk";
+  //   char *desc = "1l milk";
+  //   int price = 12;
 
   ioopm_add_merchandise(wh);
   bool merch_exist = ioopm_hash_table_lookup(wh, milk, result);
@@ -63,11 +69,139 @@ void test_add_merchandise() {
   CU_ASSERT_EQUAL(merch->stock, 0);
 
   free(result);
-  ioopm_hash_table_apply_to_all(wh, free_void_ptr_value, NULL);
-  ioopm_hash_table_apply_to_all(wh, free_void_ptr_key, NULL);
-  ioopm_hash_table_destroy(wh);
-  ioopm_hash_table_destroy(locations);
+  // ioopm_hash_table_apply_to_all(wh, free_void_ptr_value, NULL);
+  // ioopm_hash_table_apply_to_all(wh, free_void_ptr_key, NULL);
+  // ioopm_hash_table_destroy(wh);
+  // ioopm_hash_table_destroy(locations);
+  free_and_destroy_hts(wh, locations);
   
+}
+
+void test_list_merchandise() {
+  puts("test list_merchandise\n");
+  ioopm_hash_table_t *wh = ioopm_hash_table_create(ioopm_str_eq);
+  ioopm_hash_table_t *locations = ioopm_hash_table_create(ioopm_str_eq);
+  wh->hash_func = string_sum_hash;
+  locations->hash_func = string_sum_hash;
+  elem_t *result = calloc(1, sizeof(elem_t));
+  char *name = strdup("milk");
+  char *desc = strdup("1l milk");
+
+  wh_insert(wh, name, desc, 12, result);
+  list_merchandise(wh);
+  CU_ASSERT_TRUE(!ioopm_hash_table_is_empty(wh));   //Hur kan man testa att något printas med asserts?
+
+  free_and_destroy_hts(wh, locations);
+  free(result);
+
+}
+
+void test_remove_merchandise() {
+  puts("test remove_merchandise\n");
+  ioopm_hash_table_t *wh = ioopm_hash_table_create(ioopm_str_eq);
+  ioopm_hash_table_t *locations = ioopm_hash_table_create(ioopm_str_eq);
+  wh->hash_func = string_sum_hash;
+  locations->hash_func = string_sum_hash;
+  elem_t *result = calloc(1, sizeof(elem_t));
+  char *name = strdup("milk");
+  char *desc = strdup("1l milk");
+
+  wh_insert(wh, name, desc, 12, result);
+  CU_ASSERT_TRUE(!ioopm_hash_table_is_empty(wh));
+  CU_ASSERT_TRUE(ioopm_hash_table_lookup(wh, (elem_t) {.string = "milk"}, result));
+  remove_merchandise(wh, locations);
+  CU_ASSERT_TRUE(ioopm_hash_table_is_empty(wh));
+  CU_ASSERT_FALSE(ioopm_hash_table_lookup(wh, (elem_t) {.string = "milk"}, result));
+
+  free(result);
+  free_and_destroy_hts(wh, locations);
+
+}
+
+void test_edit_merchandise() {
+  puts("test edit_merchandise\n");
+  ioopm_hash_table_t *wh = ioopm_hash_table_create(ioopm_str_eq);
+  ioopm_hash_table_t *locations = ioopm_hash_table_create(ioopm_str_eq);
+  wh->hash_func = string_sum_hash;
+  locations->hash_func = string_sum_hash;
+  elem_t *result = calloc(1, sizeof(elem_t));
+  char *name = strdup("milk");
+  char *desc = strdup("1l milk");
+
+  wh_insert(wh, name, desc, 12, result);
+  CU_ASSERT_TRUE(!ioopm_hash_table_is_empty(wh));
+  CU_ASSERT_TRUE(ioopm_hash_table_lookup(wh, (elem_t) {.string = "milk"}, result));
+  ioopm_replenish(wh, locations);
+  elem_t *result_milk = result;
+  merch_t *milk_merch = result_milk->void_pointer;
+  edit_merchandise(wh, locations);
+  CU_ASSERT_TRUE(!ioopm_hash_table_is_empty(wh));
+  CU_ASSERT_FALSE(ioopm_hash_table_lookup(wh, (elem_t) {.string = "milk"}, result));
+  CU_ASSERT_TRUE(ioopm_hash_table_lookup(wh, (elem_t) {.string = "apple"}, result));
+  merch_t *apple_merch = result->void_pointer;
+  // CU_ASSERT_EQUAL(milk_merch->locations, apple_merch->locations);
+  // CU_ASSERT_EQUAL(milk_merch->stock, apple_merch->stock);
+
+  // ioopm_linked_list_destroy(list);
+  free_and_destroy_hts(wh, locations);
+  free(result);
+  
+}
+
+void test_show_stock() {
+  puts("test show_stock\n");
+  ioopm_hash_table_t *wh = ioopm_hash_table_create(ioopm_str_eq);
+  ioopm_hash_table_t *locations = ioopm_hash_table_create(ioopm_str_eq);
+  wh->hash_func = string_sum_hash;
+  locations->hash_func = string_sum_hash;
+  elem_t *result = calloc(1, sizeof(elem_t));
+  char *name = strdup("milk");
+  char *desc = strdup("1l milk");
+
+  wh_insert(wh, name, desc, 12, result);
+  ioopm_replenish(wh, locations);
+  wh_insert(wh, strdup("apple"), strdup("an apple"), 12, result);
+  CU_ASSERT_TRUE(!ioopm_hash_table_is_empty(wh));
+  CU_ASSERT_TRUE(ioopm_hash_table_lookup(wh, (elem_t) {.string = "milk"}, result));
+  //remove_merchandise(wh, locations);
+  show_stock(wh, locations);
+  CU_ASSERT_FALSE(ioopm_hash_table_is_empty(wh));
+  CU_ASSERT_TRUE(ioopm_hash_table_lookup(wh, (elem_t) {.string = "milk"}, result));
+  CU_ASSERT_TRUE(ioopm_hash_table_lookup(wh, (elem_t) {.string = "apple"}, result));
+
+  free(result);
+  free_and_destroy_hts(wh, locations);
+
+}
+
+void test_replenish() {
+  puts("test replenish\n");
+  ioopm_hash_table_t *wh = ioopm_hash_table_create(ioopm_str_eq);
+  ioopm_hash_table_t *locations = ioopm_hash_table_create(ioopm_str_eq);
+  wh->hash_func = string_sum_hash;
+  locations->hash_func = string_sum_hash;
+  elem_t *result = calloc(1, sizeof(elem_t));
+  char *name = strdup("milk");
+  char *desc = strdup("1l milk");
+
+  wh_insert(wh, name, desc, 12, result);
+  CU_ASSERT_TRUE(ioopm_hash_table_is_empty(locations));
+  ioopm_replenish(wh, locations);
+  wh_insert(wh, strdup("apple"), strdup("an apple"), 12, result);
+  CU_ASSERT_TRUE(!ioopm_hash_table_is_empty(wh));
+  CU_ASSERT_TRUE(!ioopm_hash_table_is_empty(locations));
+  CU_ASSERT_TRUE(ioopm_hash_table_lookup(wh, (elem_t) {.string = "milk"}, result));
+  //remove_merchandise(wh, locations);
+  show_stock(wh, locations);
+  CU_ASSERT_FALSE(ioopm_hash_table_is_empty(wh));
+  CU_ASSERT_TRUE(ioopm_hash_table_lookup(wh, (elem_t) {.string = "milk"}, result));
+  CU_ASSERT_TRUE(ioopm_hash_table_lookup(wh, (elem_t) {.string = "apple"}, result));
+  CU_ASSERT_TRUE(ioopm_hash_table_lookup(locations, (elem_t) {.string = "milk"}, result));
+  CU_ASSERT_FALSE(ioopm_hash_table_lookup(locations, (elem_t) {.string = "apple"}, result));
+
+  free(result);
+  free_and_destroy_hts(wh, locations);
+
 }
 
 int main() {
@@ -91,7 +225,12 @@ int main() {
   // copy a line below and change the information
   if (
     (CU_add_test(my_test_suite, "Test basic functions", test_basic_functions) == NULL) ||
-    (CU_add_test(my_test_suite, "Test add merchandise", test_add_merchandise) == NULL) ||
+    // (CU_add_test(my_test_suite, "Test add merchandise", test_add_merchandise) == NULL) ||
+    // (CU_add_test(my_test_suite, "Test list merchandise", test_list_merchandise) == NULL) ||
+    // (CU_add_test(my_test_suite, "Test remove merchandise", test_remove_merchandise) == NULL) ||
+    // (CU_add_test(my_test_suite, "Test edit merchandise", test_edit_merchandise) == NULL) ||
+    // (CU_add_test(my_test_suite, "Test show stock", test_show_stock) == NULL) ||
+    (CU_add_test(my_test_suite, "Test replenish", test_replenish) == NULL) ||
     
     0
   )

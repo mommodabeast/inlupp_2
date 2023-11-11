@@ -59,6 +59,52 @@ void free_void_ptr_key(elem_t key, elem_t *value_ignored, void *ignored) {
     free(key.void_pointer);
 }
 
+void free_and_remove(char *name, elem_t *result, ioopm_hash_table_t *wh, ioopm_hash_table_t *locations) {
+    elem_t name_elem_t = {.string = name};
+
+    merch_t *merch = result->void_pointer;
+    char *name_to_remove = merch->name;
+
+    if (merch->locations == NULL) {  //om locations lista är 0 behöver vi bara freea och remova wh ht
+        free(merch->information);
+        ioopm_hash_table_remove(wh, name_elem_t);
+    } else {
+        free(merch->information);
+        ioopm_hash_table_remove(wh, name_elem_t);
+        ioopm_list_t *keys = ioopm_hash_table_keys(locations);
+        int size = ioopm_linked_list_size(keys);
+        for (int i = 0; i < size; i++) {
+            elem_t key = ioopm_linked_list_get(keys, i);
+            if (strcmp(name, key.string) == 0) {
+                char *key_string = key.string;
+                elem_t key_elem_t = {.string = key_string};
+                ioopm_hash_table_remove(locations, key_elem_t);
+                free(key_string);
+            }
+        }
+        ioopm_linked_list_destroy(keys);
+    }
+    free(name_to_remove);
+    free(merch);
+  
+}
+
+void wh_insert(ioopm_hash_table_t *wh, char *name, char *desc, int price, elem_t *result) {
+    elem_t name_elem_t = {.string = name};
+
+    if (ioopm_hash_table_lookup(wh, name_elem_t, result)) {
+        printf("%s is already in the warehouse! Going back to main menu \n", name);
+        free(name);
+        free(desc);
+
+    } else {
+        merch_t *merchandise = ioopm_merch_create();
+        ioopm_make_merch(merchandise, name, desc, price);
+        ioopm_hash_table_insert(wh, (elem_t) {.string = name}, (elem_t) {.void_pointer = merchandise}); //inserta merch i warehouse (wh) hashtable
+        
+    }
+}
+
 void free_and_destroy_hts(ioopm_hash_table_t *wh, ioopm_hash_table_t *locations) {
     if (!ioopm_hash_table_is_empty(wh)) { //frigöra alla pekare
 
