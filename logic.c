@@ -51,9 +51,9 @@ void free_void_ptr_value(elem_t key_ignored, elem_t *value, void *ignored) {
     }
 }
 
-void free_void_ptr_value_locations(elem_t key_ignored, elem_t *value, void *ignored) {
-    free(value->void_pointer);
-}
+// void free_void_ptr_value_locations(elem_t key_ignored, elem_t *value, void *ignored) {
+//     free(value->void_pointer);
+// }
 
 void free_void_ptr_key(elem_t key, elem_t *value_ignored, void *ignored) {
     free(key.void_pointer);
@@ -65,7 +65,7 @@ void free_and_remove(char *name, elem_t *result, ioopm_hash_table_t *wh, ioopm_h
     merch_t *merch = result->void_pointer;
     char *name_to_remove = merch->name;
 
-    if (merch->locations == NULL) {  //om locations lista är 0 behöver vi bara freea och remova wh ht
+    if (merch->locations == NULL) {  //om locations lista är 0 behöver vi bara freea och remova i wh ht
         free(merch->information);
         ioopm_hash_table_remove(wh, name_elem_t);
     } else {
