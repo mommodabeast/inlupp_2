@@ -20,6 +20,8 @@
 
 typedef struct shelf shelf_t;
 typedef struct merch merch_t;
+typedef struct cart cart_t;
+extern cart_t *current_cart;
 
 
 struct shelf {
@@ -35,9 +37,16 @@ struct merch {
     ioopm_list_t *locations;
 };
 
+struct cart {
+    int cart_id;
+    ioopm_list_t *cart_content;
+};
+
 /// @brief Allocates memory on the heap for a merch_t struct
 /// @return the allocated merch_t struct
 merch_t *ioopm_merch_create();
+
+cart_t *ioopm_create_cart();
 
 /// @brief Allocates memory on the heap for a shelf_t struct
 /// @return the allocated shelf_t struct
@@ -105,3 +114,15 @@ void wh_insert(ioopm_hash_table_t *wh, char *name, char *desc, int price, elem_t
 /// @param wh the warehouse ht
 /// @param locations the locations ht
 void free_and_destroy_hts(ioopm_hash_table_t *wh, ioopm_hash_table_t *locations);
+
+void add_to_cart(ioopm_hash_table_t *wh);
+
+void create_cart();
+
+void remove_cart();
+
+void remove_from_cart();
+
+void calculate_cost();
+
+void checkout(ioopm_hash_table_t *wh);

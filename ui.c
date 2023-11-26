@@ -340,26 +340,32 @@ void event_loop(ioopm_hash_table_t *wh, ioopm_hash_table_t *locations) {
         else if(choice[0] == 'C') {
             free(choice);
             //create cart
+            create_cart();
         } 
         else if(choice[0] == 'R') {
             free(choice);
             //remove cart
+            remove_cart();
         } 
         else if(choice[0] == '+') {
             free(choice);
             //add to cart
+            add_to_cart(wh);
         } 
         else if(choice[0] == '-') {
             free(choice);
             //remove from cart
+            remove_from_cart();
         } 
         else if(choice[0] == '=') {
             free(choice);
             //calculate cost
+            calculate_cost();
         } 
         else if(choice[0] == 'O') {
             free(choice);
             //checkout
+            checkout(wh);
         } 
         else if(choice[0] == 'Q') {
             //quit

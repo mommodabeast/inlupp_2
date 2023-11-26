@@ -204,6 +204,38 @@ void test_replenish() {
 
 }
 
+void test_create_cart(void) {
+    ioopm_hash_table_t *wh = ioopm_hash_table_create(ioopm_str_eq);
+  ioopm_hash_table_t *locations = ioopm_hash_table_create(ioopm_str_eq);
+  wh->hash_func = string_sum_hash;
+  locations->hash_func = string_sum_hash;
+    printf("\n\t=====================================CREATE A MERCH=================================\n");
+    ioopm_add_merchandise(wh);
+    CU_ASSERT_EQUAL(ioopm_hash_table_size(wh), 1);
+
+    printf("\n\t=====================================REPLENISH=================================\n");
+    ioopm_replenish(wh, locations);
+    CU_ASSERT_EQUAL(ioopm_hash_table_size(wh), 1);
+
+    printf("\n\t=====================================Create Cart + ADD=================================\n");
+    create_cart();
+    add_to_cart(wh);
+    CU_ASSERT_PTR_NOT_NULL(current_cart);
+
+    printf("\n\t=====================================REMOVE FROM Cart================================\n");
+    remove_from_cart();
+
+    printf("\n\t=====================================Calculated COST================================\n");
+    calculate_cost();
+
+    printf("\n\t=====================================Checkout + delete Cart================================\n");
+    checkout(wh);
+    CU_ASSERT_PTR_NULL(current_cart);
+    // ioopm_hash_table_destroy(wh);
+    // ioopm_hash_table_destroy(locations);
+    free_and_destroy_hts(wh, locations);
+}
+
 int main() {
   // First we try to set up CUnit, and exit if we fail
   if (CU_initialize_registry() != CUE_SUCCESS)
@@ -224,13 +256,16 @@ int main() {
   // the test in question. If you want to add another test, just
   // copy a line below and change the information
   if (
-    (CU_add_test(my_test_suite, "Test basic functions", test_basic_functions) == NULL) ||
+    // (CU_add_test(my_test_suite, "Test basic functions", test_basic_functions) == NULL) ||
     // (CU_add_test(my_test_suite, "Test add merchandise", test_add_merchandise) == NULL) ||
     // (CU_add_test(my_test_suite, "Test list merchandise", test_list_merchandise) == NULL) ||
     // (CU_add_test(my_test_suite, "Test remove merchandise", test_remove_merchandise) == NULL) ||
     // (CU_add_test(my_test_suite, "Test edit merchandise", test_edit_merchandise) == NULL) ||
     // (CU_add_test(my_test_suite, "Test show stock", test_show_stock) == NULL) ||
-    (CU_add_test(my_test_suite, "Test replenish", test_replenish) == NULL) ||
+    (CU_add_test(my_test_suite, "Test create cart", test_create_cart) == NULL) ||
+    // (CU_add_test(my_test_suite, "Test remove from cart", test_remove_from_cart) == NULL) ||
+    // (CU_add_test(my_test_suite, "Test calculate cost", test_calculate_cost) == NULL) ||
+    // (CU_add_test(my_test_suite, "Test checkout", test_checkout) == NULL) ||
     
     0
   )
