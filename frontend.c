@@ -4,17 +4,17 @@
 #include "logic.h"
 #include "ui.h"
 
-void header()
-{
-    printf("   _________________\n");
-    printf("  /                /|\n");
-    printf(" /   WAREHOUSE    / |\n");
-    printf("/________________/  |\n");
-    printf("| __ __ __ __ __ |  /\n");
-    printf("| |__|__|__|__| || /\n");
-    printf("|________________|/\n");
-    printf("\n");
-}
+// void header()
+// {
+//     printf("   _________________\n");
+//     printf("  /                /|\n");
+//     printf(" /   WAREHOUSE    / |\n");
+//     printf("/________________/  |\n");
+//     printf("| __ __ __ __ __ |  /\n");
+//     printf("| |__|__|__|__| || /\n");
+//     printf("|________________|/\n");
+//     printf("\n");
+// }
 void display_menu() {
     printf("\n=== Warehouse Management System Menu ===\n");
     printf("A/a - Add Merchandise\n");

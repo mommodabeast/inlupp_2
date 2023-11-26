@@ -193,16 +193,16 @@ void show_stock(ioopm_hash_table_t *wh, ioopm_hash_table_t *locations) {
     free(result);
 }
 
-int quant_helper() {
-    puts("quantity cannot be less than 1! ");
-    int quantity = ask_question_int("How many items would you like to add to the stock? ");
+// int quant_helper() {
+//     puts("quantity cannot be less than 1! ");
+//     int quantity = ask_question_int("How many items would you like to add to the stock? ");
 
-    if (quantity > 0) {
-        return quantity;
-    } else {
-        return quant_helper();
-    }
-}
+//     if (quantity > 0) {
+//         return quantity;
+//     } else {
+//         return quant_helper();
+//     }
+// }
 
 void ioopm_replenish(ioopm_hash_table_t *wh, ioopm_hash_table_t *locations) {
 
@@ -218,7 +218,7 @@ void ioopm_replenish(ioopm_hash_table_t *wh, ioopm_hash_table_t *locations) {
         elem_t location_elem_t = {.string = location};
         
         if (quantity <= 0) {
-            quantity = quant_helper();
+            quantity = quant_helper("How many items would you like to add to the stock? ");
         }
 
         shelf_t *shelf = ioopm_shelf_create();
@@ -375,4 +375,16 @@ void event_loop(ioopm_hash_table_t *wh, ioopm_hash_table_t *locations) {
             
         }
     }
+}
+
+void header()
+{
+    printf("   _________________\n");
+    printf("  /                /|\n");
+    printf(" /   WAREHOUSE    / |\n");
+    printf("/________________/  |\n");
+    printf("| __ __ __ __ __ |  /\n");
+    printf("| |__|__|__|__| || /\n");
+    printf("|________________|/\n");
+    printf("\n");
 }

@@ -18,6 +18,8 @@ int main() {
     wh->hash_func = string_sum_hash;
     locations->hash_func = string_sum_hash;
 
+    header();
+
     event_loop(wh, locations);
 
     free_and_destroy_hts(wh, locations);

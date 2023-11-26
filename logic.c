@@ -62,6 +62,17 @@ void free_void_ptr_key(elem_t key, elem_t *value_ignored, void *ignored) {
     free(key.void_pointer);
 }
 
+int quant_helper(char *s) {
+    puts("quantity cannot be less than 1! ");
+    int quantity = ask_question_int(s);
+
+    if (quantity > 0) {
+        return quantity;
+    } else {
+        return quant_helper(s);
+    }
+}
+
 void free_and_remove(char *name, elem_t *result, ioopm_hash_table_t *wh, ioopm_hash_table_t *locations) {
     elem_t name_elem_t = {.string = name};
 
@@ -223,7 +234,7 @@ void add_to_cart(ioopm_hash_table_t *wh)
         int quantity = ask_question_int("How many items would you like to add to the cart?" );
         if (quantity <= 0)
         {
-            quantity = quant_helper();
+            quantity = quant_helper("How many items would you like to add to the cart?");
         }
         if (quantity > merch->stock)
         {
@@ -259,7 +270,7 @@ void add_to_cart(ioopm_hash_table_t *wh)
     {
         printf("Merchandise with name %s not found!\n", name);
         free(name);
-        add_to_cart(wh);
+        //add_to_cart(wh);
     }
 
     free(result);
@@ -315,7 +326,7 @@ void remove_from_cart()
 
         if (quantity <= 0)
         {
-            quantity = quant_helper();
+            quantity = quant_helper("How many items would you like to remove from the cart? ");
         }
 
         link_t *current2 = current_cart->cart_content->head;
@@ -347,7 +358,7 @@ void remove_from_cart()
     else
     {
         printf("Merchandise with name %s not found!\n", name);
-        remove_from_cart();
+        //remove_from_cart();
     }
     free(name);
 }

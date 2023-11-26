@@ -256,13 +256,14 @@ int main() {
   // the test in question. If you want to add another test, just
   // copy a line below and change the information
   if (
-    // (CU_add_test(my_test_suite, "Test basic functions", test_basic_functions) == NULL) ||
-    // (CU_add_test(my_test_suite, "Test add merchandise", test_add_merchandise) == NULL) ||
-    // (CU_add_test(my_test_suite, "Test list merchandise", test_list_merchandise) == NULL) ||
-    // (CU_add_test(my_test_suite, "Test remove merchandise", test_remove_merchandise) == NULL) ||
-    // (CU_add_test(my_test_suite, "Test edit merchandise", test_edit_merchandise) == NULL) ||
-    // (CU_add_test(my_test_suite, "Test show stock", test_show_stock) == NULL) ||
+    (CU_add_test(my_test_suite, "Test basic functions", test_basic_functions) == NULL) ||
+    (CU_add_test(my_test_suite, "Test add merchandise", test_add_merchandise) == NULL) ||
+    (CU_add_test(my_test_suite, "Test list merchandise", test_list_merchandise) == NULL) ||
+    (CU_add_test(my_test_suite, "Test remove merchandise", test_remove_merchandise) == NULL) ||
+    (CU_add_test(my_test_suite, "Test edit merchandise", test_edit_merchandise) == NULL) ||
+    (CU_add_test(my_test_suite, "Test show stock", test_show_stock) == NULL) ||
     (CU_add_test(my_test_suite, "Test create cart", test_create_cart) == NULL) ||
+
     // (CU_add_test(my_test_suite, "Test remove from cart", test_remove_from_cart) == NULL) ||
     // (CU_add_test(my_test_suite, "Test calculate cost", test_calculate_cost) == NULL) ||
     // (CU_add_test(my_test_suite, "Test checkout", test_checkout) == NULL) ||

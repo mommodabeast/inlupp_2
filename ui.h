@@ -10,7 +10,7 @@
  * @date 11 Nov 2023
  * @brief Cointains all functions that ask the user for inputs.
  *
- * This file contains all functions that take user input to modify the warehouse and locations hashtables.
+ * This file contains MOST of the functions that take user input to modify the warehouse and locations hashtables.
  * The Warehouse hashtable is a hashtable that maps the name of an item (key) to a 
  * pointer to a merch_t struct (value). The locations hashtable maps the name of an item (key)
  * to a storage location (value). 
@@ -74,3 +74,5 @@ char *ask_question_menu();
 /// @param wh the warehouse hashtable
 /// @param locations the locations hashtable
 void event_loop(ioopm_hash_table_t *wh, ioopm_hash_table_t *locations);
+
+void header();

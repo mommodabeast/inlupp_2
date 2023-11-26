@@ -10,7 +10,7 @@
  * @date 11 Nov 2023
  * @brief Cointains all functions that do not ask the user for inputs.
  *
- * This file contains all functions that do not take user input to modify the warehouse and locations hashtables.
+ * This file contains MOST of the functions that do not take user input to modify the warehouse and locations hashtables.
  * The Warehouse hashtable is a hashtable that maps the name of an item (key) to a 
  * pointer to a merch_t struct (value). The locations hashtable maps the name of an item (key)
  * to a storage location (value). 
@@ -126,3 +126,5 @@ void remove_from_cart();
 void calculate_cost();
 
 void checkout(ioopm_hash_table_t *wh);
+
+int quant_helper(char *s);
