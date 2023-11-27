@@ -115,16 +115,32 @@ void wh_insert(ioopm_hash_table_t *wh, char *name, char *desc, int price, elem_t
 /// @param locations the locations ht
 void free_and_destroy_hts(ioopm_hash_table_t *wh, ioopm_hash_table_t *locations);
 
+/// @brief Adds a selected merchandise to the current shopping cart.
+/// @param wh the warehouse ht
 void add_to_cart(ioopm_hash_table_t *wh);
 
+
+/// @brief Creates a new shopping cart for the user.
 void create_cart();
 
+
+/// @brief Removes the current shopping cart, discarding its contents.
 void remove_cart();
 
+
+/// @brief Removes a selected merchandise from the current shopping cart.
 void remove_from_cart();
 
+
+/// @brief Calculates the total cost of items in the current shopping cart.
 void calculate_cost();
 
+
+/// @brief Completes the checkout process, updating warehouse quantities and removing items from locations.
+/// @param wh the warehouse ht
 void checkout(ioopm_hash_table_t *wh);
 
+/// @brief Helper function that asks the user to input an integer larger than 0
+/// @param s A question string to ask the user
+/// @return a valid integer provided by user input
 int quant_helper(char *s);

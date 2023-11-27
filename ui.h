@@ -75,4 +75,5 @@ char *ask_question_menu();
 /// @param locations the locations hashtable
 void event_loop(ioopm_hash_table_t *wh, ioopm_hash_table_t *locations);
 
+/// @brief Prints out a neat picture of a warehouse
 void header();
